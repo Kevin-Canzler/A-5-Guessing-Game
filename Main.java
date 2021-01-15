@@ -49,6 +49,7 @@ public class Main {
 	public static boolean checkForYes(String question) {
 		System.out.println(question);
 		String userInput = input.next();
-		if (userInput.toLowerCase().charAt(0) == "y".charAt(0)) return true; else return false;
+		if (userInput.toLowerCase().charAt(0) == "y".charAt(0)) return true;
+		return false;
 	}
 }
