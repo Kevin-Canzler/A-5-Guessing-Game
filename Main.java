@@ -6,34 +6,28 @@ import java.util.Scanner;
 
 public class Main {
 	static Scanner input = new Scanner(System.in);
-	static Random rand = new Random();
 	
 	public static void main(String[] args) {
-		int gameCounter = 0; int totalGuesses = 0; int temp; int bestGame = 0;
+		int[] gameStats = {0, 0, 0};
 		loop: while(true) {
-			gameCounter++;
-			temp = guessingGame();
-			totalGuesses += temp;
-			if (bestGame == 0) bestGame = temp;
-			if (bestGame > temp) bestGame = temp;
+			int currentGame = guessingGame();
+			gameStats = new int[] {++gameStats[0], gameStats[1] + currentGame, gameStats[2] == 0 || currentGame < gameStats[2] ? currentGame : gameStats[2]};
 			if (!checkForYes("Do you want to play again?")) break loop;
 		}
-		System.out.println("Overall results:\nTotal games = " + gameCounter + "\nTotal guesses = " + totalGuesses);
-		System.out.println("Guesses/game = " + String.format("%.1f", (double) (totalGuesses) / (double) (gameCounter)) + "\nBest game = " + bestGame);
+		System.out.println("Overall results:\nTotal games = " + gameStats[0] + "\nTotal guesses = " + gameStats[1]);
+		System.out.println("Guesses/game = " + String.format("%.1f", (double) (gameStats[1]) / (double) (gameStats[0])) + "\nBest game = " + gameStats[2]);
 	}
 	
 	public static int guessingGame() {
-		int guessCounter = 0; int guess = -1; int randomNumber = rand.nextInt(100);
-		System.out.println("I'm thinking of a number between 1 and 100...");
-		System.out.println(randomNumber);
+		int[] gameStats = {0, -1}; int randomNumber = new Random() {/*magic*/}.nextInt(100);
+		System.out.println("I'm thinking of a number between 1 and 100...\n" + randomNumber);
 		loop: while(true) {
-			guessCounter++;
-			guess = askQuestionInt("Your guess?");
-			if (guess == randomNumber) break loop;
-			System.out.println((guess > randomNumber ? "It's lower." : "It's higher."));
+			gameStats = new int[] {++gameStats[0], askQuestionInt("Your guess?")};
+			if (gameStats[1] == randomNumber) break loop;
+			System.out.println((gameStats[1] > randomNumber ? "It's lower." : "It's higher."));
 		}
-		System.out.println("You got it right in " + guessCounter + (guessCounter == 1 ? " guess!" : " guesses!"));
-		return guessCounter;
+		System.out.println("You got it right in " + gameStats[0] + (gameStats[0] == 1 ? " guess!" : " guesses!"));
+		return gameStats[0];
 	}
 	
 	public static int askQuestionInt(String question) {
@@ -48,8 +42,6 @@ public class Main {
 	
 	public static boolean checkForYes(String question) {
 		System.out.println(question);
-		String userInput = input.next();
-		if (userInput.toLowerCase().charAt(0) == "y".charAt(0)) return true;
-		return false;
+		return input.next().toLowerCase().charAt(0) == 'y' ? true : false;
 	}
 }
