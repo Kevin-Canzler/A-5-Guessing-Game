@@ -41,6 +41,6 @@ public class Main {
 	
 	public static boolean checkForYes(String question, Scanner input) {
 		System.out.println(question);
-		return input.next().toLowerCase().charAt(0) == 'y' ? true : false;
+		return input.next().toLowerCase().charAt(0) == 'y';
 	}
 }
